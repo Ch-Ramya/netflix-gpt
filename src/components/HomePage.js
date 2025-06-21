@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { isValidEmail } from "../utils/validation";
+import {
+  USERS_LIST_KEY,
+  CURRENT_USER_INFO,
+  NETFLIX_BACKGROUND,
+} from "../utils/constants";
 
 const HomePage = () => {
   const [email, setEmail] = useState("");
@@ -14,11 +19,11 @@ const HomePage = () => {
     }
 
     setEmailError("");
-    const usersList = JSON.parse(localStorage.getItem("users_list")) || [];
+    const usersList = JSON.parse(localStorage.getItem(USERS_LIST_KEY)) || [];
     const isSignInForm = usersList.includes(email);
 
     localStorage.setItem(
-      "netflix_user_info",
+      CURRENT_USER_INFO,
       JSON.stringify({ email, isSignInForm })
     );
 
@@ -29,7 +34,7 @@ const HomePage = () => {
     <section className="relative w-full h-screen bg-black text-white overflow-hidden">
       {/* Background Image */}
       <img
-        src="https://assets.nflxext.com/ffe/siteui/vlv3/8200f588-2e93-4c95-8eab-ebba17821657/web/IN-en-20250616-TRIFECTA-perspective_9cbc87b2-d9bb-4fa8-9f8f-a4fe8fc72545_large.jpg"
+        src={NETFLIX_BACKGROUND}
         alt="Netflix Banner"
         className="absolute w-full h-full object-cover opacity-50"
       />
@@ -38,7 +43,7 @@ const HomePage = () => {
       <div className="absolute w-full h-full bg-black bg-opacity-50"></div>
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 text-center max-w-2xl mx-auto">
+      <div className="relative z-7 flex flex-col items-center justify-center h-full px-4 text-center max-w-2xl mx-auto">
         <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
           Unlimited movies, TV shows and more
         </h1>

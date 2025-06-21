@@ -5,6 +5,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useEffect } from "react";
 import { addUser, removeUser } from "../utils/userSlice";
 import { FaChevronDown } from "react-icons/fa";
+import { NETFLIX_LOGO } from "../utils/constants";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -16,8 +17,10 @@ const Header = () => {
       if (user) {
         const { uid, email, displayName, photoURL } = user;
         dispatch(addUser({ uid, email, displayName, photoURL }));
+        navigate("/browse");
       } else {
         dispatch(removeUser());
+        navigate("/");
       }
     });
 
@@ -27,7 +30,7 @@ const Header = () => {
   const handleSignOut = () => {
     signOut(auth)
       .then(() => {
-        navigate("/");
+        console.log("user signed out");
       })
       .catch((error) => {
         console.error("Sign-out error:", error);
@@ -38,11 +41,7 @@ const Header = () => {
     <header className="flex justify-between items-center w-full px-10 py-4 bg-gradient-to-b from-black fixed z-10">
       {/* Logo */}
       <Link to="/">
-        <img
-          className="w-32 md:w-40"
-          src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Logonetflix.png"
-          alt="Netflix Logo"
-        />
+        <img className="w-32 md:w-40" src={NETFLIX_LOGO} alt="Netflix Logo" />
       </Link>
 
       {/* Right side */}

@@ -1,9 +1,14 @@
-import Header from "./Header";
+import useNowPlayingMovies from "../hooks/useNowPlayingMovies";
+import TrailerContainer from "./TrailerContainer";
+import MovieListing from "./MovieListing";
 
 const Browse = () => {
+  useNowPlayingMovies();
+
   return (
     <>
-      <p>Browse page</p>
+      <TrailerContainer />
+      <MovieListing />
     </>
   );
 };

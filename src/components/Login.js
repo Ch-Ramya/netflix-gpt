@@ -3,9 +3,15 @@ import { validateForm } from "../utils/validation";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import {
+  USERS_LIST_KEY,
+  CURRENT_USER_INFO,
+  NETFLIX_BACKGROUND,
+} from "../utils/constants";
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
@@ -20,14 +26,14 @@ const Login = () => {
   const passwordRef = useRef(null);
 
   useLayoutEffect(() => {
-    const userInfo = JSON.parse(localStorage.getItem("netflix_user_info"));
+    const userInfo = JSON.parse(localStorage.getItem(CURRENT_USER_INFO));
     if (userInfo?.email) {
       emailRef.current.value = userInfo.email;
       setIsSignInForm(userInfo.isSignInForm);
       setTimeout(() => {
         passwordRef.current?.focus();
       }, 100);
-      localStorage.removeItem("netflix_user_info");
+      localStorage.removeItem(CURRENT_USER_INFO);
     }
   }, []);
 
@@ -57,14 +63,23 @@ const Login = () => {
         .then((userCredential) => {
           const user = userCredential.user;
           const usersList =
-            JSON.parse(localStorage.getItem("users_list")) || [];
+            JSON.parse(localStorage.getItem(USERS_LIST_KEY)) || [];
           if (!usersList.includes(email)) {
             usersList.push(email);
-            localStorage.setItem("users_list", JSON.stringify(usersList));
+            localStorage.setItem(USERS_LIST_KEY, JSON.stringify(usersList));
           }
         })
+        .then(() => {
+          updateProfile(auth.currentUser, {
+            displayName: name,
+            photoURL: "",
+          });
+        })
+        .then(() => {
+          console.log("profile updated");
+        })
         .catch((error) => {
-          console.warn(error.code + ": " + error.message);
+          console.error(error.code + ": " + error.message);
         });
     } else {
       signInWithEmailAndPassword(auth, email, password)
@@ -72,7 +87,7 @@ const Login = () => {
           const user = userCredential.user;
         })
         .catch((error) => {
-          console.warn(error.code + ": " + error.message);
+          console.error(error.code + ": " + error.message);
         });
     }
   };
@@ -81,7 +96,7 @@ const Login = () => {
     <div className="relative w-full h-screen bg-black text-white">
       {/* Background Image */}
       <img
-        src="https://assets.nflxext.com/ffe/siteui/vlv3/7968847f-3da9-44b3-8bbb-13a46579881f/web/IN-en-20250609-TRIFECTA-perspective_32b70b51-20d4-46db-8a1a-3d5428be5f0e_large.jpg"
+        src={NETFLIX_BACKGROUND}
         alt="netflix background"
         className="absolute w-full h-full object-cover opacity-60"
       />
