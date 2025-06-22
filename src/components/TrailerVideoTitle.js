@@ -2,7 +2,7 @@ import { FaPlay, FaInfoCircle } from "react-icons/fa";
 
 const TrailerVideoTitle = ({ title, description }) => {
   return (
-    <div className="absolute bottom-72 left-8 md:left-16 max-w-2xl text-white z-10">
+    <div className="absolute bottom-96 left-8 md:left-16 max-w-2xl text-white z-10">
       <h1 className="text-4xl md:text-5xl font-bold mb-4 drop-shadow-lg">
         {title}
       </h1>

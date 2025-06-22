@@ -24,9 +24,8 @@ const TrailerVideoBackground = ({ movieId, title, backdrop }) => {
   if (!trailer) return null;
 
   return (
-    <div className="relative w-full h-[48.25vw] overflow-hidden bg-black">
-      {/* 🎥 Video or fallback image */}
-      {!showFallback && trailer ? (
+    <div className="relative w-full h-[59vw] overflow-hidden bg-black z-0">
+      {!showFallback ? (
         <ReactPlayer
           ref={playerRef}
           url={`https://www.youtube.com/watch?v=${trailer.key}`}
@@ -58,27 +57,26 @@ const TrailerVideoBackground = ({ movieId, title, backdrop }) => {
         />
       )}
 
-      {/* 🎨 Gradient overlay */}
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-black via-transparent to-transparent z-5"></div>
+      {/* Fade at bottom */}
+      <div className="absolute bottom-0 w-full h-40 bg-gradient-to-t from-black via-black/80 to-transparent z-10" />
 
-      {/* 🔇 Mute / 🔁 Replay + U/A Label */}
-      <div className="absolute bottom-72 right-8 md:right-0 z-20 flex items-center gap-3">
-        {!showFallback && trailer ? (
+      {/* Mute / Replay / UA */}
+      <div className="absolute bottom-96 right-8 z-20 flex items-center gap-3">
+        {!showFallback ? (
           <button
             onClick={() => setIsMuted(!isMuted)}
-            className="bg-white/30 text-white p-2 rounded-full hover:bg-white/30 transition border border-white"
+            className="bg-white/30 text-white p-2 rounded-full border border-white"
           >
             {isMuted ? <FaVolumeMute size={20} /> : <FaVolumeUp size={20} />}
           </button>
-        ) : trailerEnded ? (
+        ) : (
           <button
             onClick={handleReplay}
-            className="bg-white/30 text-white p-2 rounded-full hover:bg-white/50 transition border border-white"
+            className="bg-white/30 text-white p-2 rounded-full border border-white"
           >
             <FaRedo size={20} />
           </button>
-        ) : null}
-
+        )}
         <div className="bg-white/30 text-white text-sm px-6 py-2 font-medium backdrop-blur-sm border-l-4 border-l-white">
           U/A 16+
         </div>

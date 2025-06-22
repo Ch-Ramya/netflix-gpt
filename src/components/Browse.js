@@ -1,15 +1,15 @@
 import useNowPlayingMovies from "../hooks/useNowPlayingMovies";
+import MoviesContainer from "./MoviesContainer";
 import TrailerContainer from "./TrailerContainer";
-import MovieListing from "./MovieListing";
 
 const Browse = () => {
   useNowPlayingMovies();
 
   return (
-    <>
+    <div className="relative bg-black">
       <TrailerContainer />
-      <MovieListing />
-    </>
+      <MoviesContainer />
+    </div>
   );
 };
 

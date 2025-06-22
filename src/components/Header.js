@@ -38,7 +38,7 @@ const Header = () => {
   };
 
   return (
-    <header className="flex justify-between items-center w-full px-10 py-4 bg-gradient-to-b from-black fixed z-10">
+    <header className="flex justify-between items-center w-full px-10 py-4 bg-gradient-to-b from-black fixed z-20">
       {/* Logo */}
       <Link to="/">
         <img className="w-32 md:w-40" src={NETFLIX_LOGO} alt="Netflix Logo" />
