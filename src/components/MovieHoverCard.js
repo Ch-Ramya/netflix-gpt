@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { FaPlay, FaThumbsUp, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import useMovieDetails from "../hooks/useMovieDetails";
+import { FAVOURITES_KEY } from "../utils/constants";
 
 const MovieHoverCard = ({ movieId }) => {
   const [showDescription, setShowDescription] = useState(false);
@@ -9,13 +10,13 @@ const MovieHoverCard = ({ movieId }) => {
 
   useEffect(() => {
     if (!movieDetails) return;
-    const favourites = JSON.parse(localStorage.getItem("my_favourites")) || [];
+    const favourites = JSON.parse(localStorage.getItem(FAVOURITES_KEY)) || [];
     const exists = favourites.some((item) => item.id === movieDetails.id);
     setIsFavourite(exists);
   }, [movieDetails]);
 
   const toggleFavourite = () => {
-    const favourites = JSON.parse(localStorage.getItem("my_favourites")) || [];
+    const favourites = JSON.parse(localStorage.getItem(FAVOURITES_KEY)) || [];
     const index = favourites.findIndex((item) => item.id === movieDetails.id);
     if (index !== -1) {
       favourites.splice(index, 1);
@@ -24,7 +25,7 @@ const MovieHoverCard = ({ movieId }) => {
       favourites.push(movieDetails);
       setIsFavourite(true);
     }
-    localStorage.setItem("my_favourites", JSON.stringify(favourites));
+    localStorage.setItem(FAVOURITES_KEY, JSON.stringify(favourites));
   };
 
   if (!movieDetails) return null;

@@ -1,16 +1,22 @@
 import { signOut, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useNavigate, Link, useLocation } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
 import { addUser, removeUser } from "../utils/userSlice";
-import { FaChevronDown } from "react-icons/fa";
-import { NETFLIX_LOGO } from "../utils/constants";
+import { FaChevronDown, FaSearch } from "react-icons/fa";
+import { NETFLIX_LOGO, SEARCH_PLACEHOLDER } from "../utils/constants";
 
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const user = useSelector((store) => store.user);
+
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -27,14 +33,26 @@ const Header = () => {
     return () => unsubscribe();
   }, [dispatch]);
 
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("click", handleOutsideClick);
+    return () => document.removeEventListener("click", handleOutsideClick);
+  }, []);
+
   const handleSignOut = () => {
-    signOut(auth)
-      .then(() => {
-        console.log("user signed out");
-      })
-      .catch((error) => {
-        console.error("Sign-out error:", error);
-      });
+    signOut(auth).catch((error) => console.error("Sign-out error:", error));
+  };
+
+  const toggleSearch = () => {
+    if (!showSearch) {
+      setShowSearch(true);
+    } else if (showSearch && searchText.trim() === "") {
+      setShowSearch(false);
+    }
   };
 
   return (
@@ -44,7 +62,7 @@ const Header = () => {
         <img className="w-32 md:w-40" src={NETFLIX_LOGO} alt="Netflix Logo" />
       </Link>
 
-      {/* Right side */}
+      {/* Right Section */}
       {!user ? (
         <div className="flex items-center gap-4">
           {/* Language Dropdown */}
@@ -57,13 +75,12 @@ const Header = () => {
                 Hindi
               </option>
             </select>
-            {/* Chevron */}
             <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-white">
               <FaChevronDown />
             </div>
           </div>
 
-          {/* Sign In button */}
+          {/* Sign In */}
           <button
             onClick={() => navigate("/login")}
             className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded font-semibold"
@@ -72,21 +89,80 @@ const Header = () => {
           </button>
         </div>
       ) : (
-        <div className="flex items-center gap-6 text-white font-medium">
-          <span className="hidden md:inline">
-            Welcome, <strong>{user.displayName?.split(" ")[0]}</strong>
-          </span>
+        <div className="flex items-center gap-6 text-white font-medium relative">
+          {/* Search Input + Icon */}
+          <div className="relative">
+            {!showSearch ? (
+              <button
+                onClick={toggleSearch}
+                className={`p-2 hover:text-red-500 ${
+                  showSearch ? "text-white" : ""
+                }`}
+              >
+                <FaSearch className="text-lg" />
+              </button>
+            ) : (
+              <div className="flex items-center bg-black border border-zinc-500 px-4 py-2 rounded shadow-lg">
+                <FaSearch
+                  onClick={toggleSearch}
+                  className="text-white opacity-70 mr-2"
+                />
+                <input
+                  type="text"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                  placeholder={SEARCH_PLACEHOLDER}
+                  className="bg-black text-white w-full outline-none placeholder-gray-400 text-sm"
+                  autoFocus
+                />
+              </div>
+            )}
+          </div>
 
-          <Link to="/browse" className="hover:text-red-500 transition-colors">
+          {/* Browse */}
+          <Link
+            to="/browse"
+            className={`transition-colors ${
+              location.pathname === "/browse"
+                ? "text-red-500 font-semibold"
+                : "hover:text-red-500"
+            }`}
+          >
             Browse
           </Link>
 
-          <button
-            onClick={handleSignOut}
-            className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded"
-          >
-            Sign Out
-          </button>
+          {/* Welcome Dropdown */}
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setShowDropdown((prev) => !prev)}
+              className="flex items-center gap-1 hover:text-red-500"
+            >
+              Welcome, <strong>{user.displayName?.split(" ")[0]}</strong>
+              <FaChevronDown className="text-sm mt-0.5" />
+            </button>
+            {showDropdown && (
+              <div className="absolute right-0 top-full mt-2 w-44 bg-black border border-zinc-700 rounded-md shadow-lg z-50 text-sm">
+                <Link
+                  to="/profile"
+                  className="block px-4 py-2 hover:bg-zinc-800"
+                >
+                  My Profile
+                </Link>
+                <Link
+                  to="/favourites"
+                  className="block px-4 py-2 hover:bg-zinc-800"
+                >
+                  My Favourites
+                </Link>
+                <button
+                  onClick={handleSignOut}
+                  className="w-full text-left px-4 py-2 hover:bg-zinc-800"
+                >
+                  Sign Out
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </header>
