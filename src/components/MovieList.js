@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import { IMG_CDN } from "../utils/constants";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import MovieCard from "./MovieCard";
 
-const MovieList = ({ title, shows, itemBaseWidth = 180, overlap = false }) => {
+const MovieList = ({ title, shows, itemBaseWidth = 220, overlap = false }) => {
   const containerRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(window.innerWidth);
   const [itemWidth, setItemWidth] = useState(itemBaseWidth);
@@ -27,15 +27,13 @@ const MovieList = ({ title, shows, itemBaseWidth = 180, overlap = false }) => {
   }, [itemBaseWidth]);
 
   const totalPages = Math.ceil(shows?.length / itemsPerPage);
-
   const pageStartIndex = currentPage * itemsPerPage;
   const pageEndIndex = Math.min(pageStartIndex + itemsPerPage, shows?.length);
-
   const visibleItems = shows?.slice(pageStartIndex, pageEndIndex);
 
   return (
     <div
-      className={`px-4 md:px-8 ${
+      className={`px-8 md:px-12 ${
         overlap ? "-mt-32 md:-mt-56 relative z-20" : "my-16"
       }`}
     >
@@ -48,26 +46,23 @@ const MovieList = ({ title, shows, itemBaseWidth = 180, overlap = false }) => {
         {currentPage > 0 && (
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-7 bg-black/50 hover:bg-black/80 p-2 rounded-full text-white"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/80 p-2 rounded-full text-white"
           >
             <FaChevronLeft />
           </button>
         )}
 
-        {/* Carousel Row */}
-        <div className="overflow-hidden">
-          <div className="flex gap-4">
-            {visibleItems?.map((item) => (
-              <img
+        {/* ✅ Carousel Container */}
+        <div className="relative z-10 overflow-visible">
+          <div className="flex gap-4 overflow-visible">
+            {visibleItems?.map((item, index) => (
+              <MovieCard
                 key={item.id}
-                src={IMG_CDN + item.poster_path}
-                alt={item.title || item.name}
-                className="rounded-md transition-transform duration-300 hover:scale-105"
-                style={{
-                  width: `${itemWidth}px`,
-
-                  flexShrink: 0,
-                }}
+                item={item}
+                itemWidth={itemWidth}
+                index={index}
+                pageStartIndex={pageStartIndex}
+                title={title}
               />
             ))}
           </div>
@@ -79,15 +74,11 @@ const MovieList = ({ title, shows, itemBaseWidth = 180, overlap = false }) => {
             onClick={() =>
               setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1))
             }
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-7 bg-black/50 hover:bg-black/80 p-2 rounded-full text-white"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/80 p-2 rounded-full text-white"
           >
             <FaChevronRight />
           </button>
         )}
-
-        {/* Fade gradient on sides 
-        <div className="absolute top-0 left-0 w-12 h-full bg-gradient-to-r from-black to-transparent z-5 pointer-events-none" />
-        <div className="absolute top-0 right-0 w-12 h-full bg-gradient-to-l from-black to-transparent z-5 pointer-events-none" /> */}
       </div>
     </div>
   );

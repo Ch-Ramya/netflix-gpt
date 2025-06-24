@@ -20,7 +20,6 @@ const useMovieTrailer = (movieId) => {
         ? filteredTrailers[Math.floor(Math.random() * filteredTrailers.length)]
         : jsonData.results[0];
 
-   
     dispatch(addTrailerMovie(trailerInfo));
   };
 
