@@ -5,16 +5,16 @@ import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { addUser, removeUser } from "../utils/userSlice";
 import { FaChevronDown, FaSearch } from "react-icons/fa";
-import { NETFLIX_LOGO, SEARCH_PLACEHOLDER } from "../utils/constants";
+import { NETFLIX_LOGO } from "../utils/constants";
+import { toggleSearchStatus } from "../utils/gptSlice";
+import GptSearchbar from "./GptSearchbar";
 
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const user = useSelector((store) => store.user);
-
-  const [showSearch, setShowSearch] = useState(false);
-  const [searchText, setSearchText] = useState("");
+  const isSearchActive = useSelector((store) => store.gptSearch.isSearchActive);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -47,12 +47,8 @@ const Header = () => {
     signOut(auth).catch((error) => console.error("Sign-out error:", error));
   };
 
-  const toggleSearch = () => {
-    if (!showSearch) {
-      setShowSearch(true);
-    } else if (showSearch && searchText.trim() === "") {
-      setShowSearch(false);
-    }
+  const handleSearchClick = () => {
+    dispatch(toggleSearchStatus());
   };
 
   return (
@@ -92,30 +88,17 @@ const Header = () => {
         <div className="flex items-center gap-6 text-white font-medium relative">
           {/* Search Input + Icon */}
           <div className="relative">
-            {!showSearch ? (
+            {!isSearchActive ? (
               <button
-                onClick={toggleSearch}
+                onClick={handleSearchClick}
                 className={`p-2 hover:text-red-500 ${
-                  showSearch ? "text-white" : ""
+                  isSearchActive ? "text-white" : ""
                 }`}
               >
                 <FaSearch className="text-lg" />
               </button>
             ) : (
-              <div className="flex items-center bg-black border border-zinc-500 px-4 py-2 rounded shadow-lg">
-                <FaSearch
-                  onClick={toggleSearch}
-                  className="text-white opacity-70 mr-2"
-                />
-                <input
-                  type="text"
-                  value={searchText}
-                  onChange={(e) => setSearchText(e.target.value)}
-                  placeholder={SEARCH_PLACEHOLDER}
-                  className="bg-black text-white w-full outline-none placeholder-gray-400 text-sm"
-                  autoFocus
-                />
-              </div>
+              <GptSearchbar handleSearchClick={handleSearchClick} />
             )}
           </div>
 
@@ -123,7 +106,7 @@ const Header = () => {
           <Link
             to="/browse"
             className={`transition-colors ${
-              location.pathname === "/browse"
+              location.pathname === "/browse" && !isSearchActive
                 ? "text-red-500 font-semibold"
                 : "hover:text-red-500"
             }`}
@@ -146,7 +129,7 @@ const Header = () => {
                   to="/profile"
                   className="block px-4 py-2 hover:bg-zinc-800"
                 >
-                  My Profile
+                  My Account
                 </Link>
                 <Link
                   to="/favourites"

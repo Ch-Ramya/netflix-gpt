@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { IMG_CDN } from "../utils/constants";
 import MovieHoverCard from "./MovieHoverCard";
 
-const MovieCard = ({ item, itemWidth, pageStartIndex, index, title }) => {
+const MovieCard = ({ item, itemWidth=220, pageStartIndex, index, title = "" }) => {
   const [isHover, setIsHover] = useState(false);
   const timeoutRef = useRef(null);
 

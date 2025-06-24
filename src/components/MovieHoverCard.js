@@ -33,7 +33,7 @@ const MovieHoverCard = ({ movieId }) => {
   return (
     <div
       className="absolute top-[-40px] left-1/2 -translate-x-1/2 w-[320px] z-50
-        bg-zinc-900 rounded-lg shadow-2xl border border-zinc-800
+        bg-zinc-900 rounded-lg border border-zinc-800
         transition-all duration-300 scale-100 group-hover:scale-110 
         origin-bottom shadow-[0_20px_50px_rgba(0,0,0,0.8)] drop-shadow-md"
     >
