@@ -168,7 +168,7 @@ const Header = () => {
                   to="/profile"
                   className="block px-4 py-2 hover:bg-zinc-800"
                 >
-                  My Account
+                  My Profile
                 </Link>
                 <Link
                   to="/favourites"
