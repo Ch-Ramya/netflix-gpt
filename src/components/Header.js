@@ -18,6 +18,12 @@ const Header = () => {
   const isSearchActive = useSelector((store) => store.gptSearch.isSearchActive);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
+  const rawUserName =
+    user?.displayName || (user?.email ? user.email.split("@")[0] : "N/A");
+  const userName =
+    rawUserName !== "N?A"
+      ? rawUserName.charAt(0).toUpperCase() + rawUserName.slice(1)
+      : rawUserName;
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -143,7 +149,17 @@ const Header = () => {
               onClick={() => setShowDropdown((prev) => !prev)}
               className="flex items-center gap-1 hover:text-red-500"
             >
-              Welcome, <strong>{user.displayName?.split(" ")[0]}</strong>
+              <img
+                src={
+                  user?.photoURL ||
+                  "https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
+                }
+                alt="Profile"
+                className="w-8 h-8 rounded-full object-cover"
+              />
+              <span className="capitalize hidden sm:block font-medium px-1">
+                {userName}
+              </span>
               <FaChevronDown className="text-sm mt-0.5" />
             </button>
             {showDropdown && (

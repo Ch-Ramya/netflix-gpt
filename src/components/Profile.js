@@ -3,6 +3,12 @@ import { LANGUAGE_OPTIONS } from "../utils/constants";
 
 const Profile = () => {
   const user = useSelector((store) => store.user);
+  const rawUserName =
+    user?.displayName || (user?.email ? user.email.split("@")[0] : "N/A");
+  const userName =
+    rawUserName !== "N?A"
+      ? rawUserName.charAt(0).toUpperCase() + rawUserName.slice(1)
+      : rawUserName;
 
   return (
     <div className="min-h-screen bg-black text-white pt-24 px-4">
@@ -24,7 +30,7 @@ const Profile = () => {
           />
           <div>
             <p>
-              <strong>Name:</strong> {user?.displayName || "N/A"}
+              <strong>Name:</strong> {userName}
             </p>
             <p>
               <strong>Email:</strong> {user?.email}
