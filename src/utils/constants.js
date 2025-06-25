@@ -5,7 +5,8 @@ export const NETFLIX_BACKGROUND =
   "https://assets.nflxext.com/ffe/siteui/vlv3/7968847f-3da9-44b3-8bbb-13a46579881f/web/IN-en-20250609-TRIFECTA-perspective_32b70b51-20d4-46db-8a1a-3d5428be5f0e_large.jpg";
 export const USERS_LIST_KEY = "users_list";
 export const CURRENT_USER_INFO = "netflix_user_info";
-export const USER_AVATAR = "";
+export const USER_AVATAR =
+  "https://occ-0-2611-3663.1.nflxso.net/dnm/api/v6/vN7bi_My87NPKvsBoib006Llxzg/AAAABTZ2zlLdBVC05fsd2YQAR43J6vB1NAUBOOrxt7oaFATxMhtdzlNZ846H3D8TZzooe2-FT853YVYs8p001KVFYopWi4D4NXM.png?r=229";
 export const SEARCH_PLACEHOLDER = "Movies, Titles, Genres";
 
 export const API_OPTIONS = {

@@ -7,6 +7,7 @@ import Login from "./components/Login";
 import Browse from "./components/Browse";
 import HomePage from "./components/HomePage";
 import MyFavourites from "./components/MyFavourites";
+import Profile from "./components/Profile";
 
 const appRouter = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/favourites",
         element: <MyFavourites />,
+      },
+      {
+        path: "/profile",
+        element: <Profile />,
       },
     ],
   },
