@@ -3,11 +3,12 @@ import { auth } from "../utils/firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
-import { addUser, removeUser } from "../utils/userSlice";
+import { addUser, removeUser, setFavourites } from "../utils/userSlice";
 import { FaChevronDown, FaSearch } from "react-icons/fa";
-import { NETFLIX_LOGO } from "../utils/constants";
+import { NETFLIX_LOGO, LANGUAGE_OPTIONS } from "../utils/constants";
 import { clearSearch, toggleSearchStatus } from "../utils/gptSlice";
 import GptSearchbar from "./GptSearchbar";
+import { getUserFavourites } from "../utils/firestore";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -19,10 +20,12 @@ const Header = () => {
   const dropdownRef = useRef(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         const { uid, email, displayName, photoURL } = user;
         dispatch(addUser({ uid, email, displayName, photoURL }));
+        const favourites = await getUserFavourites(uid);
+        dispatch(setFavourites(favourites));
         navigate("/browse");
       } else {
         dispatch(removeUser());
@@ -71,12 +74,15 @@ const Header = () => {
           {/* Language Dropdown */}
           <div className="relative inline-block">
             <select className="bg-transparent text-white border border-white px-4 py-2 rounded appearance-none pr-10">
-              <option className="text-black" value="en">
-                English
-              </option>
-              <option className="text-black" value="hi">
-                Hindi
-              </option>
+              {LANGUAGE_OPTIONS.map((language) => (
+                <option
+                  key={language.key}
+                  value={language.key}
+                  className="text-black"
+                >
+                  {language.label}
+                </option>
+              ))}
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-white">
               <FaChevronDown />
@@ -120,6 +126,16 @@ const Header = () => {
           >
             Browse
           </button>
+          <Link
+            to="/favourites"
+            className={`transition-colors ${
+              location.pathname === "/favourites"
+                ? "text-red-500 font-semibold"
+                : "hover:text-red-500"
+            }`}
+          >
+            My Favourites
+          </Link>
 
           {/* Welcome Dropdown */}
           <div className="relative" ref={dropdownRef}>

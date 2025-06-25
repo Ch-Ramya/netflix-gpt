@@ -4,7 +4,6 @@ export const IMG_CDN = "https://image.tmdb.org/t/p/w500/";
 export const NETFLIX_BACKGROUND =
   "https://assets.nflxext.com/ffe/siteui/vlv3/7968847f-3da9-44b3-8bbb-13a46579881f/web/IN-en-20250609-TRIFECTA-perspective_32b70b51-20d4-46db-8a1a-3d5428be5f0e_large.jpg";
 export const USERS_LIST_KEY = "users_list";
-export const FAVOURITES_KEY = "my_favourites";
 export const CURRENT_USER_INFO = "netflix_user_info";
 export const USER_AVATAR = "";
 export const SEARCH_PLACEHOLDER = "Movies, Titles, Genres";
@@ -36,10 +35,9 @@ export const MOVIE_CATEGORIES = [
 ];
 
 export const LANGUAGE_OPTIONS = [
-  { key: "", label: "" },
-  { key: "", label: "" },
-  { key: "", label: "" },
-  { key: "", label: "" },
+  { key: "en", label: "English" },
+  { key: "hi", label: "हिन्दी (Hindi)" },
+  { key: "te", label: "తెలుగు (Telugu)" },
 ];
 
 export const GENRE_ID_MAP = {

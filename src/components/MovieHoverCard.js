@@ -1,32 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { saveUserFavourites } from "../utils/firestore";
+import { addToFavourites, removeFromFavourites } from "../utils/userSlice";
+import { useSelector } from "react-redux";
 import { FaPlay, FaThumbsUp, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import useMovieDetails from "../hooks/useMovieDetails";
-import { FAVOURITES_KEY } from "../utils/constants";
+import useToggleFavourite from "../hooks/useToggleFavourite";
 
 const MovieHoverCard = ({ movieId }) => {
   const [showDescription, setShowDescription] = useState(false);
-  const [isFavourite, setIsFavourite] = useState(false);
   const movieDetails = useMovieDetails(movieId);
 
-  useEffect(() => {
-    if (!movieDetails) return;
-    const favourites = JSON.parse(localStorage.getItem(FAVOURITES_KEY)) || [];
-    const exists = favourites.some((item) => item.id === movieDetails.id);
-    setIsFavourite(exists);
-  }, [movieDetails]);
-
-  const toggleFavourite = () => {
-    const favourites = JSON.parse(localStorage.getItem(FAVOURITES_KEY)) || [];
-    const index = favourites.findIndex((item) => item.id === movieDetails.id);
-    if (index !== -1) {
-      favourites.splice(index, 1);
-      setIsFavourite(false);
-    } else {
-      favourites.push(movieDetails);
-      setIsFavourite(true);
-    }
-    localStorage.setItem(FAVOURITES_KEY, JSON.stringify(favourites));
-  };
+  const { isFavourite, toggleFavourite } = useToggleFavourite(movieDetails);
 
   if (!movieDetails) return null;
 
@@ -47,6 +31,10 @@ const MovieHoverCard = ({ movieId }) => {
         alt="preview"
         className="rounded-t-lg object-fit h-[200px] w-full"
       />
+      {/* Movie Title */}
+      <h3 className="text-base font-semibold text-white mt-2 px-2 truncate">
+        {movieDetails.title || movieDetails.name}
+      </h3>
 
       {/* Info Panel */}
       <div className="p-3 text-white space-y-3">

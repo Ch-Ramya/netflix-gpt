@@ -6,6 +6,7 @@ import appStore from "./utils/appStore";
 import Login from "./components/Login";
 import Browse from "./components/Browse";
 import HomePage from "./components/HomePage";
+import MyFavourites from "./components/MyFavourites";
 
 const appRouter = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/browse",
         element: <Browse />,
+      },
+      {
+        path: "/favourites",
+        element: <MyFavourites />,
       },
     ],
   },
