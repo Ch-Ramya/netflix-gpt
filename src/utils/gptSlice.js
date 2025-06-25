@@ -6,6 +6,7 @@ const gptSlice = createSlice({
     isSearchActive: false,
     searchResults: null,
     searchText: "",
+    isLoading: false,
   },
   reducers: {
     toggleSearchStatus: (state) => {
@@ -17,9 +18,18 @@ const gptSlice = createSlice({
     setSearchText: (state, action) => {
       state.searchText = action.payload;
     },
+    setLoading: (state, action) => {
+      state.isLoading = action.payload;
+    },
+    clearSearch: (state) => {
+      state.searchText = "";
+      state.searchResults = null;
+      state.isSearchActive = false;
+      state.isLoading = false;
+    },
   },
 });
 
-export const { toggleSearchStatus, setSearchResults, setSearchText } = gptSlice.actions;
+export const { toggleSearchStatus, setSearchResults, setSearchText, setLoading, clearSearch } = gptSlice.actions;
 
 export default gptSlice.reducer;

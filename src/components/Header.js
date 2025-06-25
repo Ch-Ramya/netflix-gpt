@@ -6,7 +6,7 @@ import { useEffect, useState, useRef } from "react";
 import { addUser, removeUser } from "../utils/userSlice";
 import { FaChevronDown, FaSearch } from "react-icons/fa";
 import { NETFLIX_LOGO } from "../utils/constants";
-import { toggleSearchStatus } from "../utils/gptSlice";
+import { clearSearch, toggleSearchStatus } from "../utils/gptSlice";
 import GptSearchbar from "./GptSearchbar";
 
 const Header = () => {
@@ -49,6 +49,13 @@ const Header = () => {
 
   const handleSearchClick = () => {
     dispatch(toggleSearchStatus());
+  };
+
+  const handleBrowseClick = () => {
+    if (isSearchActive) dispatch(clearSearch());
+    else if (location.pathname !== "/browse") {
+      navigate("/browse");
+    }
   };
 
   return (
@@ -103,8 +110,8 @@ const Header = () => {
           </div>
 
           {/* Browse */}
-          <Link
-            to="/browse"
+          <button
+            onClick={handleBrowseClick}
             className={`transition-colors ${
               location.pathname === "/browse" && !isSearchActive
                 ? "text-red-500 font-semibold"
@@ -112,7 +119,7 @@ const Header = () => {
             }`}
           >
             Browse
-          </Link>
+          </button>
 
           {/* Welcome Dropdown */}
           <div className="relative" ref={dropdownRef}>

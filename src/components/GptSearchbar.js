@@ -6,6 +6,7 @@ import {
   setSearchResults,
   toggleSearchStatus,
   setSearchText,
+  setLoading,
 } from "../utils/gptSlice";
 import mapInputToGenreId from "../utils/mapInputToGenreId";
 
@@ -24,6 +25,7 @@ const GptSearchbar = () => {
     //make api call to get movie results
     const genreIds = mapInputToGenreId(searchText);
     dispatch(setSearchText(searchText));
+    dispatch(setLoading(true));
     let url = "";
     try {
       if (genreIds.length > 0) {
@@ -50,6 +52,8 @@ const GptSearchbar = () => {
     } catch (error) {
       console.error("Search error:", error);
       setSearchResults(null); // fallback trigger
+    } finally {
+      dispatch(setLoading(false));
     }
   };
 

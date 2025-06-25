@@ -2,9 +2,12 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import MovieCard from "./MovieCard";
 import { NETFLIX_BACKGROUND } from "../utils/constants";
+import LoadingSpinner from "./LoadingSpinner";
 
 const GptSearchSuggestions = () => {
-  const searchResults = useSelector((store) => store.gptSearch.searchResults);
+  const gptStore = useSelector((store) => store.gptSearch);
+  const searchResults = gptStore.searchResults;
+  const isLoading = gptStore.isLoading;
   const searchText = useSelector((store) => store.gptSearch.searchText);
 
   const hasSearched = searchText?.trim().length > 0;
@@ -27,8 +30,12 @@ const GptSearchSuggestions = () => {
       )}
 
       {/* Case 1: No search done yet */}
-      {!hasSearched ? (
-        <div className="flex flex-col items-center justify-center text-center min-h-[60vh]">
+      {isLoading ? (
+        <div className="flex items-center justify-center min-h-[80vh]">
+          <LoadingSpinner />
+        </div>
+      ) : !hasSearched ? (
+        <div className="flex flex-col items-center justify-center text-center min-h-[80vh]">
           <p className="text-xl font-medium text-gray-300 mb-2">
             Search for <span className="text-white font-semibold">comedy</span>,{" "}
             <span className="text-white font-semibold">horror</span>,{" "}
@@ -45,7 +52,7 @@ const GptSearchSuggestions = () => {
             <span className="text-blue-400 italic">"{searchText}"</span>
           </h2>
 
-          <div className="flex flex-wrap gap-y-12 justify-evenly">
+          <div className="flex flex-wrap gap-y-12 gap-x-8 p-10">
             {searchResults.map((item, index) => (
               <MovieCard
                 key={item.id}
@@ -59,7 +66,7 @@ const GptSearchSuggestions = () => {
         </>
       ) : (
         // Case 3: Search done, but no results
-        <div className="flex flex-col items-center justify-center text-center min-h-[60vh]">
+        <div className="flex flex-col items-center justify-center text-center min-h-[80vh]">
           <p className="text-2xl sm:text-3xl font-bold mb-6">
             No movies found for your search.
           </p>

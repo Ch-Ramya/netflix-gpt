@@ -39,9 +39,13 @@ const MovieHoverCard = ({ movieId }) => {
     >
       {/* Backdrop Image */}
       <img
-        src={`https://image.tmdb.org/t/p/w500${movieDetails.backdrop_path}`}
+        src={
+          movieDetails.backdrop_path
+            ? `https://image.tmdb.org/t/p/w500${movieDetails.backdrop_path}`
+            : `https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`
+        }
         alt="preview"
-        className="rounded-t-lg object-cover h-[200px] w-full"
+        className="rounded-t-lg object-fit h-[200px] w-full"
       />
 
       {/* Info Panel */}

@@ -2,7 +2,14 @@ import { useState, useRef } from "react";
 import { IMG_CDN } from "../utils/constants";
 import MovieHoverCard from "./MovieHoverCard";
 
-const MovieCard = ({ item, itemWidth=220, pageStartIndex, index, title = "" }) => {
+const MovieCard = ({
+  item,
+  itemWidth = 220,
+  pageStartIndex,
+  index,
+  title = "",
+}) => {
+  console.log(item);
   const [isHover, setIsHover] = useState(false);
   const timeoutRef = useRef(null);
 
@@ -41,7 +48,7 @@ const MovieCard = ({ item, itemWidth=220, pageStartIndex, index, title = "" }) =
       <img
         src={IMG_CDN + item.poster_path}
         alt={item.title || item.name}
-        className="rounded-md transition-transform duration-300 w-full h-full object-cover"
+        className="rounded-md transition-transform duration-300 w-full h-full object-fit"
       />
 
       {isHover && <MovieHoverCard movieId={item.id} />}
