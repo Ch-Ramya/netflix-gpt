@@ -6,14 +6,17 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
+import { useSelector } from "react-redux";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import {
   USERS_LIST_KEY,
   CURRENT_USER_INFO,
   NETFLIX_BACKGROUND,
 } from "../utils/constants";
+import lang from "../utils/langConstants";
 
 const Login = () => {
+  const language = useSelector((store) => store.config.language);
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errors, setErrors] = useState({
     name: "",
@@ -114,7 +117,9 @@ const Login = () => {
           }}
         >
           <h1 className="text-3xl font-bold mb-6">
-            {isSignInForm ? "Sign In" : "Sign Up"}
+            {isSignInForm
+              ? lang[language].sign_in || "Sign In"
+              : lang[language].sign_up || "Sign Up"}
           </h1>
 
           {!isSignInForm && (
@@ -122,7 +127,7 @@ const Login = () => {
               <input
                 ref={nameRef}
                 type="text"
-                placeholder="Full Name"
+                placeholder={lang[language].name || "Full Name"}
                 className={`w-full p-3 bg-gray-700 rounded placeholder-gray-300 focus:outline-none ${
                   errors.name ? "border border-red-500" : ""
                 }`}
@@ -137,7 +142,7 @@ const Login = () => {
             <input
               ref={emailRef}
               type="text"
-              placeholder="Email Address"
+              placeholder={lang[language].email || "Email Address"}
               className={`w-full p-3 bg-gray-700 rounded placeholder-gray-300 focus:outline-none ${
                 errors.email ? "border border-red-500" : ""
               }`}
@@ -151,7 +156,7 @@ const Login = () => {
             <input
               ref={passwordRef}
               type={showPassword ? "text" : "password"}
-              placeholder="Password"
+              placeholder={lang[language].password || "Password"}
               className={`w-full p-3 bg-gray-700 rounded placeholder-gray-300 pr-10 focus:outline-none ${
                 errors.password ? "border border-red-500" : ""
               }`}
@@ -171,7 +176,9 @@ const Login = () => {
             type="submit"
             className="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded font-semibold text-lg"
           >
-            {isSignInForm ? "Sign In" : "Sign Up"}
+            {isSignInForm
+              ? lang[language].sign_in || "Sign In"
+              : lang[language].sign_up || "Sign Up"}
           </button>
 
           <p
@@ -179,8 +186,9 @@ const Login = () => {
             onClick={toggleSignInform}
           >
             {isSignInForm
-              ? "New to Netflix? Sign up now."
-              : "Already have an account? Sign in."}
+              ? lang[language].newToNetflix || "New to Netflix? Sign up now."
+              : lang[language].alreadyAcc ||
+                "Already have an account? Sign in."}
           </p>
         </form>
       </div>

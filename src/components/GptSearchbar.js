@@ -9,11 +9,13 @@ import {
   setLoading,
 } from "../utils/gptSlice";
 import mapInputToGenreId from "../utils/mapInputToGenreId";
+import lang from "../utils/langConstants";
 
 const GptSearchbar = () => {
   const dispatch = useDispatch();
   const searchInput = useRef(null);
   const gptSearch = useSelector((store) => store.gptSearch);
+  const language = useSelector((store) => store.config.language);
   const isSearchActive = gptSearch.isSearchActive;
 
   const handleSearchClick = async () => {
@@ -66,7 +68,7 @@ const GptSearchbar = () => {
       <input
         ref={searchInput}
         type="text"
-        placeholder={SEARCH_PLACEHOLDER}
+        placeholder={lang[language].search_placeholder || SEARCH_PLACEHOLDER}
         className="bg-black text-white w-full outline-none placeholder-gray-400 text-sm"
         autoFocus
         onKeyDown={(e) => {

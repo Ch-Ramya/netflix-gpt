@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { isValidEmail } from "../utils/validation";
 import {
@@ -6,10 +7,12 @@ import {
   CURRENT_USER_INFO,
   NETFLIX_BACKGROUND,
 } from "../utils/constants";
+import lang from "../utils/langConstants";
 
 const HomePage = () => {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
+  const language = useSelector((store) => store.config.language);
   const navigate = useNavigate();
 
   const handleGetStarted = () => {
@@ -45,13 +48,15 @@ const HomePage = () => {
       {/* Content */}
       <div className="relative z-7 flex flex-col items-center justify-center h-full px-4 text-center max-w-2xl mx-auto">
         <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
-          Unlimited movies, TV shows and more
+          {lang[language].homepage_main_title ||
+            "Unlimited movies, TV shows and more"}
         </h1>
         <h2 className="text-xl md:text-2xl mb-6">
-          Watch anywhere. Cancel anytime.
+          {lang[language].homepage_title || "Watch anywhere. Cancel anytime."}
         </h2>
         <p className="text-lg mb-4">
-          Ready to watch? Enter your email to create or restart your membership.
+          {lang[language].homepage_subtitle ||
+            "Ready to watch? Enter your email to create or restart your membership."}
         </p>
 
         {/* Email Form */}
@@ -61,7 +66,7 @@ const HomePage = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email address"
+              placeholder={lang[language].email || "Email Address"}
               className={`w-full px-4 py-3 rounded text-black focus:outline-none ${
                 emailError ? "border border-red-500" : ""
               }`}
@@ -76,7 +81,7 @@ const HomePage = () => {
             className="bg-red-600 hover:bg-red-700 px-6 py-3 rounded text-white font-semibold text-lg"
             onClick={handleGetStarted}
           >
-            Get Started &gt;
+            {lang[language].getstarted_title || "Get Started"};
           </button>
         </div>
       </div>

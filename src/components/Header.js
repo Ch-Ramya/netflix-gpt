@@ -9,12 +9,16 @@ import { NETFLIX_LOGO, LANGUAGE_OPTIONS } from "../utils/constants";
 import { clearSearch, toggleSearchStatus } from "../utils/gptSlice";
 import GptSearchbar from "./GptSearchbar";
 import { getUserFavourites } from "../utils/firestore";
+import lang from "../utils/langConstants";
+import { changeLanguage } from "../utils/configSlice";
 
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const user = useSelector((store) => store.user);
+  const config = useSelector((store) => store.config);
+  const language = config.language;
   const isSearchActive = useSelector((store) => store.gptSearch.isSearchActive);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
@@ -43,6 +47,12 @@ const Header = () => {
   }, [dispatch]);
 
   useEffect(() => {
+    // Sync language from localStorage
+    const savedLang = localStorage.getItem("app_language");
+    if (savedLang && savedLang !== config.language) {
+      dispatch(changeLanguage(savedLang));
+    }
+
     const handleOutsideClick = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setShowDropdown(false);
@@ -79,7 +89,12 @@ const Header = () => {
         <div className="flex items-center gap-4">
           {/* Language Dropdown */}
           <div className="relative inline-block">
-            <select className="bg-transparent text-white border border-white px-4 py-2 rounded appearance-none pr-10">
+            <select
+              className="bg-transparent text-white border border-white px-4 py-2 rounded appearance-none pr-10"
+              value={language}
+              defaultValue="en"
+              onChange={(e) => dispatch(changeLanguage(e.target.value))}
+            >
               {LANGUAGE_OPTIONS.map((language) => (
                 <option
                   key={language.key}
@@ -100,7 +115,7 @@ const Header = () => {
             onClick={() => navigate("/login")}
             className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded font-semibold"
           >
-            Sign In
+            {lang[language].sign_in || "Sign In"}
           </button>
         </div>
       ) : (
@@ -130,7 +145,7 @@ const Header = () => {
                 : "hover:text-red-500"
             }`}
           >
-            Browse
+            {lang[language].browse || "Browse"}
           </button>
           <Link
             to="/favourites"
@@ -140,7 +155,7 @@ const Header = () => {
                 : "hover:text-red-500"
             }`}
           >
-            My Favourites
+            {lang[language].my_favourites || "My Favourites"}
           </Link>
 
           {/* Welcome Dropdown */}
@@ -155,7 +170,7 @@ const Header = () => {
                   "https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
                 }
                 alt="Profile"
-                className="w-8 h-8 rounded-full object-cover"
+                className="w-8 h-8 rounded-full object-fit"
               />
               <span className="capitalize hidden sm:block font-medium px-1">
                 {userName}
@@ -168,19 +183,19 @@ const Header = () => {
                   to="/profile"
                   className="block px-4 py-2 hover:bg-zinc-800"
                 >
-                  My Profile
+                  {lang[language].my_profile || "My Profile"}
                 </Link>
                 <Link
                   to="/favourites"
                   className="block px-4 py-2 hover:bg-zinc-800"
                 >
-                  My Favourites
+                  {lang[language].my_favourites || "My Favourites"}
                 </Link>
                 <button
                   onClick={handleSignOut}
                   className="w-full text-left px-4 py-2 hover:bg-zinc-800"
                 >
-                  Sign Out
+                  {lang[language].sign_out || "Sign Out"}
                 </button>
               </div>
             )}

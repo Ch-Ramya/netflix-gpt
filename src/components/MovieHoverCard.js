@@ -5,8 +5,10 @@ import { useSelector } from "react-redux";
 import { FaPlay, FaThumbsUp, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import useMovieDetails from "../hooks/useMovieDetails";
 import useToggleFavourite from "../hooks/useToggleFavourite";
+import lang from "../utils/langConstants";
 
 const MovieHoverCard = ({ movieId }) => {
+  const language = useSelector((store) => store.config.language);
   const [showDescription, setShowDescription] = useState(false);
   const movieDetails = useMovieDetails(movieId);
 
@@ -43,7 +45,7 @@ const MovieHoverCard = ({ movieId }) => {
           {/* Play Button */}
           <button className="flex items-center gap-2 bg-white text-black font-bold text-sm px-4 py-1.5 rounded hover:bg-opacity-80 transition">
             <FaPlay className="text-sm" />
-            Play
+            {lang[language].play || "Play"}
           </button>
 
           {/* Like Button */}
@@ -51,6 +53,11 @@ const MovieHoverCard = ({ movieId }) => {
             className={`w-9 h-9 flex items-center justify-center rounded-full bg-black/60 hover:bg-black/80 transition ${
               isFavourite ? "text-red-500" : "text-white"
             }`}
+            title={
+              isFavourite
+                ? lang[language].remove_favourites || "Remove from My Faourites"
+                : lang[language].add_favourites || "Add to My Favourites"
+            }
             onClick={toggleFavourite}
           >
             <FaThumbsUp className="text-sm" />
@@ -60,6 +67,11 @@ const MovieHoverCard = ({ movieId }) => {
           <button
             className="w-9 h-9 flex items-center justify-center rounded-full bg-black/60 hover:bg-black/80 transition text-white ml-auto"
             onClick={() => setShowDescription((prev) => !prev)}
+            title={
+              showDescription
+                ? lang[language].hide_description || "Hide Movie Details"
+                : lang[language].show_description || "See Movie Details"
+            }
           >
             {showDescription ? (
               <FaChevronUp className="text-sm" />

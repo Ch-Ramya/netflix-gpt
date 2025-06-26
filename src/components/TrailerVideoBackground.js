@@ -3,6 +3,7 @@ import useMovieTrailer from "../hooks/useMovieTrailer";
 import { useSelector } from "react-redux";
 import { FaVolumeMute, FaVolumeUp, FaRedo } from "react-icons/fa";
 import ReactPlayer from "react-player/youtube";
+import lang from "../utils/langConstants";
 
 const TrailerVideoBackground = ({ movieId, title, backdrop }) => {
   const [isMuted, setIsMuted] = useState(true);

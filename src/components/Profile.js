@@ -1,7 +1,13 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { changeLanguage } from "../utils/configSlice";
 import { LANGUAGE_OPTIONS } from "../utils/constants";
+import lang from "../utils/langConstants";
 
 const Profile = () => {
+  const dispatch = useDispatch();
+
+  const config = useSelector((store) => store.config);
+  const language = config.language;
   const user = useSelector((store) => store.user);
   const rawUserName =
     user?.displayName || (user?.email ? user.email.split("@")[0] : "N/A");
@@ -17,7 +23,7 @@ const Profile = () => {
       {/* Box 1 - User Info */}
       <div className="w-full max-w-2xl mx-auto bg-zinc-900 rounded-lg p-6 mb-6 shadow-md">
         <h2 className="text-xl font-semibold border-b border-gray-600 pb-2 mb-4">
-          User Information
+          {lang[language].user_information || "User Information"}
         </h2>
         <div className="flex items-center gap-4">
           <img
@@ -30,10 +36,10 @@ const Profile = () => {
           />
           <div>
             <p>
-              <strong>Name:</strong> {userName}
+              <strong>{lang[language].name || "Name"}:</strong> {userName}
             </p>
             <p>
-              <strong>Email:</strong> {user?.email}
+              <strong>{lang[language].email || "Email"}:</strong> {user?.email}
             </p>
           </div>
         </div>
@@ -42,16 +48,18 @@ const Profile = () => {
       {/* Box 2 - Language Preferences */}
       <div className="w-full max-w-2xl mx-auto bg-zinc-900 rounded-lg p-6 mb-6 shadow-md">
         <h2 className="text-xl font-semibold border-b border-gray-600 pb-2 mb-4">
-          Language Preferences
+          {lang[language].language_preference_title || "Language Preferences"}
         </h2>
         <div className="flex items-center gap-4">
           <label htmlFor="language" className="font-semibold">
-            Language:
+            {lang[language].language || "Language"}:
           </label>
           <select
             id="language"
             className="bg-zinc-800 text-white border border-zinc-600 px-4 py-2 rounded"
+            value={language}
             defaultValue="en"
+            onChange={(e) => dispatch(changeLanguage(e.target.value))}
           >
             {LANGUAGE_OPTIONS.map(({ key, label }) => (
               <option key={key} value={key} className="text-black">
@@ -65,13 +73,16 @@ const Profile = () => {
       {/* Box 3 - Subscription Info */}
       <div className="w-full max-w-2xl mx-auto bg-zinc-900 rounded-lg p-6 shadow-md">
         <h2 className="text-xl font-semibold border-b border-gray-600 pb-2 mb-4">
-          Subscription Info
+          {lang[language].subscription_info || "Subscription Info"}
         </h2>
         <ul className="list-disc pl-6 space-y-2">
-          <li>Plan: Premium (4K + HDR)</li>
-          <li>Price: ₹1649/year</li>
-          <li>Next Billing Date: July 25, 2026</li>
-          <li>Status: Active</li>
+          <li>{lang[language].plan_label || "Plan"}: Premium (4K + HDR)</li>
+          <li>{lang[language].price_label || "Price"}: ₹1649/year</li>
+          <li>
+            {lang[language].next_billing_date || "Next Billing Date"}: July 25,
+            2026
+          </li>
+          <li>{lang[language].status_label || "Status"}: Active</li>
         </ul>
       </div>
     </div>
