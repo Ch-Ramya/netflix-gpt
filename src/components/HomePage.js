@@ -81,7 +81,7 @@ const HomePage = () => {
             className="bg-red-600 hover:bg-red-700 px-6 py-3 rounded text-white font-semibold text-lg"
             onClick={handleGetStarted}
           >
-            {lang[language].getstarted_title || "Get Started"};
+            {lang[language].getstarted_title || "Get Started"}
           </button>
         </div>
       </div>
