@@ -61,7 +61,7 @@ const MovieDetails = () => {
         <li>
           <strong>Starring:</strong>{" "}
           {movie.credits?.cast
-            ?.slice(0, 5)
+            ?.slice(0, 10)
             ?.map((actor) => actor.name)
             .join(", ")}
         </li>
