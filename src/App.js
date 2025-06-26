@@ -8,6 +8,7 @@ import Browse from "./components/Browse";
 import HomePage from "./components/HomePage";
 import MyFavourites from "./components/MyFavourites";
 import Profile from "./components/Profile";
+import MovieDetails from "./components/MovieDetails";
 
 const appRouter = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/profile",
         element: <Profile />,
+      },
+      {
+        path: "/movie/:movieId",
+        element: <MovieDetails />,
       },
     ],
   },

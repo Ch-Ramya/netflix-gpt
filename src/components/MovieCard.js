@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { IMG_CDN } from "../utils/constants";
 import MovieHoverCard from "./MovieHoverCard";
+import { useNavigate } from "react-router-dom";
 
 const MovieCard = ({
   item,
@@ -9,7 +10,7 @@ const MovieCard = ({
   index,
   title = "",
 }) => {
-  console.log(item);
+  const navigate = useNavigate();
   const [isHover, setIsHover] = useState(false);
   const timeoutRef = useRef(null);
 
@@ -22,10 +23,15 @@ const MovieCard = ({
     setIsHover(false);
   };
 
+  const handleMovieCardClick = () => {
+    navigate(`/movie/${item.id}`);
+  };
+
   return (
     <div
       key={item.id}
       className="relative hover:cursor-pointer overflow-visible"
+      onClick={handleMovieCardClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       style={{
