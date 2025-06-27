@@ -1,4 +1,5 @@
 import { useState, useRef, useLayoutEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { validateForm } from "../utils/validation";
 import {
   createUserWithEmailAndPassword,
@@ -16,6 +17,8 @@ import {
 import lang from "../utils/langConstants";
 
 const Login = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const language = useSelector((store) => store.config.language);
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errors, setErrors] = useState({
@@ -49,6 +52,49 @@ const Login = () => {
     });
   };
 
+  const redirectIfNeeded = () => {
+    if (location.pathname === "/" || location.pathname === "/login") {
+      navigate("/browse");
+    }
+  };
+
+  const handleSignUp = async (email, password, name) => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      // Add user email to localStorage list
+      const usersList = JSON.parse(localStorage.getItem(USERS_LIST_KEY)) || [];
+      if (!usersList.includes(email)) {
+        usersList.push(email);
+        localStorage.setItem(USERS_LIST_KEY, JSON.stringify(usersList));
+      }
+
+      // Update displayName
+      await updateProfile(auth.currentUser, {
+        displayName: name,
+        photoURL: "",
+      });
+
+      console.log("profile updated");
+      redirectIfNeeded();
+    } catch (error) {
+      console.error(error.code + ": " + error.message);
+    }
+  };
+
+  const handleSignIn = async (email, password) => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      redirectIfNeeded();
+    } catch (error) {
+      console.error(error.code + ": " + error.message);
+    }
+  };
+
   const handleFormSubmission = () => {
     const email = emailRef.current.value.trim();
     const password = passwordRef.current.value.trim();
@@ -56,43 +102,12 @@ const Login = () => {
 
     const errorObj = validateForm(isSignInForm, email, password, name);
     const isValid = Object.values(errorObj).every((e) => e === "");
-
     setErrors(errorObj);
-
     if (!isValid) return;
 
-    if (!isSignInForm) {
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          const user = userCredential.user;
-          const usersList =
-            JSON.parse(localStorage.getItem(USERS_LIST_KEY)) || [];
-          if (!usersList.includes(email)) {
-            usersList.push(email);
-            localStorage.setItem(USERS_LIST_KEY, JSON.stringify(usersList));
-          }
-        })
-        .then(() => {
-          updateProfile(auth.currentUser, {
-            displayName: name,
-            photoURL: "",
-          });
-        })
-        .then(() => {
-          console.log("profile updated");
-        })
-        .catch((error) => {
-          console.error(error.code + ": " + error.message);
-        });
-    } else {
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          const user = userCredential.user;
-        })
-        .catch((error) => {
-          console.error(error.code + ": " + error.message);
-        });
-    }
+    isSignInForm
+      ? handleSignIn(email, password)
+      : handleSignUp(email, password, name);
   };
 
   return (

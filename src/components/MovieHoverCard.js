@@ -58,7 +58,10 @@ const MovieHoverCard = ({ movieId }) => {
                 ? lang[language].remove_favourites || "Remove from My Faourites"
                 : lang[language].add_favourites || "Add to My Favourites"
             }
-            onClick={toggleFavourite}
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleFavourite();
+            }}
           >
             <FaThumbsUp className="text-sm" />
           </button>
@@ -66,7 +69,10 @@ const MovieHoverCard = ({ movieId }) => {
           {/* Expand Button */}
           <button
             className="w-9 h-9 flex items-center justify-center rounded-full bg-black/60 hover:bg-black/80 transition text-white ml-auto"
-            onClick={() => setShowDescription((prev) => !prev)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowDescription((prev) => !prev);
+            }}
             title={
               showDescription
                 ? lang[language].hide_description || "Hide Movie Details"

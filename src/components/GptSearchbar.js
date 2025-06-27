@@ -14,7 +14,7 @@ import lang from "../utils/langConstants";
 const GptSearchbar = () => {
   const dispatch = useDispatch();
   const searchInput = useRef(null);
-  const gptSearch = useSelector((store) => store.gptSearch);
+    const gptSearch = useSelector((store) => store.gptSearch);
   const language = useSelector((store) => store.config.language);
   const isSearchActive = gptSearch.isSearchActive;
 
@@ -22,6 +22,7 @@ const GptSearchbar = () => {
     const searchText = searchInput.current.value.trim();
     if (isSearchActive && searchText === "") {
       dispatch(toggleSearchStatus());
+      return;
     }
 
     //make api call to get movie results

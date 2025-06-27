@@ -36,9 +36,6 @@ const Header = () => {
         dispatch(addUser({ uid, email, displayName, photoURL }));
         const favourites = await getUserFavourites(uid);
         dispatch(setFavourites(favourites));
-        if (location.pathname === "/") {
-          navigate("/browse");
-        }
       } else {
         dispatch(removeUser());
         navigate("/");
@@ -64,12 +61,19 @@ const Header = () => {
     return () => document.removeEventListener("click", handleOutsideClick);
   }, []);
 
+  useEffect(() => {
+    setShowDropdown(false);
+  }, [location.pathname]);
+
   const handleSignOut = () => {
     signOut(auth).catch((error) => console.error("Sign-out error:", error));
   };
 
   const handleSearchClick = () => {
     dispatch(toggleSearchStatus());
+    if (location.pathname !== "/browse") {
+      navigate("/browse");
+    }
   };
 
   const handleBrowseClick = () => {
