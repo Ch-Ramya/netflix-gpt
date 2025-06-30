@@ -8,12 +8,12 @@ https://netflixgpt-clone.vercel.app/
 
 ## Features
 
-- 🔒 **Firebase Authentication** (Sign In / Sign Out)
-- 🔍 **Search** movies and shows using TMDB API
-- 🎥 **Trailer previews** using React Player
-- ❤️ **Add to Favourites** with Firestore backend
-- 🧠 **Redux Toolkit** for centralized state management
-- 🌍 **Multi-language support** (English, Hindi, Telugu)
+-  **Firebase Authentication** (Sign In / Sign Out)
+-  **Search** movies and shows using TMDB API
+-  **Trailer previews** using React Player
+-  **Add to Favourites** with Firestore backend
+-  **Redux Toolkit** for centralized state management
+-  **Multi-language support** (English, Hindi, Telugu)
 
 
 ## Tech Stack
